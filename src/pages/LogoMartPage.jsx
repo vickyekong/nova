@@ -4,8 +4,9 @@ import { ChevronDown } from 'lucide-react';
 import { AnimatePresence, LayoutGroup, motion } from 'framer-motion';
 import { SEO } from '../components/SEO';
 import { CTABand } from '../components/CTABand';
+import { PageHero } from '../components/PageHero';
 import { LogoCard } from '../components/logo-mart/LogoCard';
-import { Reveal, Stagger, StaggerItem } from '../components/motion/Reveal';
+import { Stagger, StaggerItem } from '../components/motion/Reveal';
 import {
   logos,
   logoIndustries,
@@ -49,20 +50,13 @@ export default function LogoMartPage() {
         path="/logo-mart"
       />
 
-      <section className="mesh-bg border-b border-ink/8 py-14 sm:py-16">
-        <div className="container-nova max-w-3xl">
-          <Reveal>
-            <p className="section-label">Logo Mart</p>
-            <h1 className="heading-lg mt-3 text-balance">
-              Can’t wait for custom? Grab a logo, make it yours, launch today.
-            </h1>
-            <p className="body-lg mt-4">
-              Pre-made marks. Exclusive once sold. Pay with Paystack — files in
-              your inbox within 24 hours.
-            </p>
-          </Reveal>
-        </div>
-      </section>
+      <PageHero
+        label="Logo Mart"
+        title="Can’t wait for custom? Grab a logo, make it yours, launch today."
+      >
+        Pre-made marks. Exclusive once sold. Pay with Paystack — files in your
+        inbox within 24 hours.
+      </PageHero>
 
       <section className="border-b border-ink/8 py-12">
         <Stagger className="container-nova grid gap-8 sm:grid-cols-3">
@@ -92,7 +86,7 @@ export default function LogoMartPage() {
                     'rounded-nova px-3.5 py-2 text-sm font-medium transition-colors',
                     industry === i.id
                       ? 'bg-nova text-white'
-                      : 'bg-cream-dark text-ink-soft hover:bg-cream-deeper',
+                      : 'border border-ink/20 bg-white text-ink hover:border-nova hover:text-nova',
                   )}
                 >
                   {i.label}
@@ -164,7 +158,7 @@ export default function LogoMartPage() {
         </div>
       </section>
 
-      <section className="border-t border-ink/8 bg-cream-dark py-14">
+      <section className="border-t border-ink/8 bg-white py-14">
         <div className="container-nova max-w-2xl">
           <p className="section-label">FAQ</p>
           <h2 className="heading-md mt-3">Before you buy</h2>
@@ -172,7 +166,7 @@ export default function LogoMartPage() {
             {logoMartFaq.map((item, i) => (
               <div
                 key={item.q}
-                className="overflow-hidden rounded-nova border border-ink/8 bg-cream"
+                className="overflow-hidden rounded-nova border border-ink/8 bg-white"
               >
                 <button
                   type="button"

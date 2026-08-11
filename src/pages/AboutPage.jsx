@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { SEO } from '../components/SEO';
 import { CTABand } from '../components/CTABand';
+import { PageHero } from '../components/PageHero';
 import { site } from '../data/site';
 
 export default function AboutPage() {
@@ -13,14 +14,10 @@ export default function AboutPage() {
         path="/about"
       />
 
-      <section className="border-b border-ink/8 bg-ignition-radial py-14">
-        <div className="container-nova max-w-3xl">
-          <p className="section-label">About</p>
-          <h1 className="heading-lg mt-3 text-balance">
-            The little sister of Novus — same DNA, different pace.
-          </h1>
-        </div>
-      </section>
+      <PageHero
+        label="About"
+        title="The little sister of Novus — same DNA, different pace."
+      />
 
       <section className="py-14 sm:py-16">
         <div className="container-nova grid gap-12 lg:grid-cols-2">
@@ -60,11 +57,15 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="bg-cream-dark py-14">
+      <section className="bg-ink py-14 text-white">
         <div className="container-nova max-w-2xl">
-          <p className="section-label">The idea</p>
-          <h2 className="heading-md mt-3">Ignition</h2>
-          <p className="mt-4 text-ink-soft leading-relaxed">
+          <p className="font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-nova">
+            The idea
+          </p>
+          <h2 className="mt-3 font-display text-xl font-semibold tracking-tight text-white sm:text-2xl">
+            Ignition
+          </h2>
+          <p className="mt-4 leading-relaxed text-white/70">
             Nova is a star igniting — small, bright, fast-moving. That’s the
             promise: get your business lit up and looking the part without the
             agency wait. The spark shows up as energy in the design, not as a
@@ -79,12 +80,11 @@ export default function AboutPage() {
           <h2 className="heading-md mt-3">A note from the founder</h2>
           <blockquote className="mt-6 border-l-2 border-nova pl-5">
             <p className="text-lg leading-relaxed text-ink">
-              {/* [FOUNDER NOTE — PLACEHOLDER] */}
-              “[FOUNDER NOTE] I built Nova because too many sharp founders were
-              stuck between DIY Canva and agency invoices they couldn’t justify
-              yet. You deserve work that looks serious — without waiting six
-              weeks for a proposal. Nova is that middle gear. When you’re ready
-              for the full strategy engine, Novus is still here.”
+              “I built Nova because too many sharp founders were stuck between
+              DIY Canva and agency invoices they couldn’t justify yet. You
+              deserve work that looks serious — without waiting six weeks for a
+              proposal. Nova is that middle gear. When you’re ready for the full
+              strategy engine, Novus is still here.”
             </p>
             <footer className="mt-4 text-sm text-ink-muted">
               — Victore, Novus Africa / Nova

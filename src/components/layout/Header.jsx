@@ -11,6 +11,8 @@ export function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+  const isHome = location.pathname === '/';
+  const light = isHome && !scrolled && !open;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -35,12 +37,12 @@ export function Header() {
       className={cn(
         'fixed inset-x-0 top-0 z-50 transition-all duration-300',
         scrolled || open
-          ? 'border-b border-ink/5 bg-cream/90 backdrop-blur-xl'
+          ? 'border-b border-ink/8 bg-white/92 backdrop-blur-xl'
           : 'bg-transparent',
       )}
     >
-      <nav className="container-nova flex h-16 items-center justify-between lg:h-20">
-        <Logo />
+      <nav className="container-nova flex h-16 items-center justify-between lg:h-[4.5rem]">
+        <Logo inverted={light} />
 
         <div className="hidden items-center gap-0.5 lg:flex">
           {navLinks.map((link) => (
@@ -50,8 +52,14 @@ export function Header() {
               end={link.path === '/'}
               className={({ isActive }) =>
                 cn(
-                  'group relative rounded-lg px-3 py-2 text-sm font-medium transition-colors',
-                  isActive ? 'text-nova' : 'text-ink-soft hover:text-ink',
+                  'group relative px-3 py-2 text-sm font-medium transition-colors',
+                  light
+                    ? isActive
+                      ? 'text-nova'
+                      : 'text-white/75 hover:text-white'
+                    : isActive
+                      ? 'text-nova'
+                      : 'text-ink-soft hover:text-ink',
                 )
               }
             >
@@ -60,7 +68,7 @@ export function Header() {
                   {link.name}
                   <span
                     className={cn(
-                      'absolute inset-x-3 -bottom-0.5 h-px origin-left bg-nova transition-transform duration-300',
+                      'absolute inset-x-3 -bottom-0.5 h-0.5 origin-left bg-nova transition-transform duration-300',
                       isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100',
                     )}
                   />
@@ -78,7 +86,10 @@ export function Header() {
 
         <button
           type="button"
-          className="inline-flex h-10 w-10 items-center justify-center rounded-nova text-ink lg:hidden"
+          className={cn(
+            'inline-flex h-10 w-10 items-center justify-center rounded-nova lg:hidden',
+            light ? 'text-white' : 'text-ink',
+          )}
           aria-label={open ? 'Close menu' : 'Open menu'}
           onClick={() => setOpen((v) => !v)}
         >
@@ -89,7 +100,7 @@ export function Header() {
       <AnimatePresence>
         {open && (
           <motion.div
-            className="border-t border-ink/5 bg-cream lg:hidden"
+            className="border-t border-ink/8 bg-white lg:hidden"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}

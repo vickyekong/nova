@@ -14,7 +14,7 @@ export default function HomePage() {
     <>
       <SEO
         title="Affordable Logo & Website Design for SMEs"
-        description="Nova by Novus Africa — Novus-grade design for small businesses in Nigeria. Fixed pricing, fast turnaround, Logo Mart ready-to-buy logos."
+        description="Nova — design for small businesses in Nigeria. Fixed pricing, fast turnaround, Logo Mart ready-to-buy logos."
         path="/"
       />
       <Hero />

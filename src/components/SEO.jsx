@@ -6,10 +6,10 @@ export function SEO({
   description,
   path = '',
 }) {
-  const fullTitle = title ? `${title} · Nova by Novus Africa` : `Nova · ${site.tagline}`;
+  const fullTitle = title ? `${title} · Nova` : `Nova · ${site.tagline}`;
   const desc =
     description ||
-    'Affordable logo design and small business websites in Nigeria. Novus-grade design, sized for SMEs — fixed pricing, fast turnaround.';
+    'Affordable logo design and small business websites in Nigeria. Fixed pricing, fast turnaround.';
 
   useEffect(() => {
     document.title = fullTitle;

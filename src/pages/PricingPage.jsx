@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Check, ArrowUpRight } from 'lucide-react';
 import { SEO } from '../components/SEO';
 import { CTABand } from '../components/CTABand';
+import { PageHero } from '../components/PageHero';
 import { pricingTiers, pricingNote } from '../data/pricing';
 import { site } from '../data/site';
 
@@ -14,13 +15,9 @@ export default function PricingPage() {
         path="/pricing"
       />
 
-      <section className="border-b border-ink/8 bg-ignition-radial py-14">
-        <div className="container-nova max-w-3xl">
-          <p className="section-label">Pricing</p>
-          <h1 className="heading-lg mt-3">{pricingNote.headline}</h1>
-          <p className="body-lg mt-4">{pricingNote.body}</p>
-        </div>
-      </section>
+      <PageHero label="Pricing" title={pricingNote.headline}>
+        {pricingNote.body}
+      </PageHero>
 
       <section className="py-14 sm:py-16">
         <div className="container-nova grid gap-5 md:grid-cols-2 xl:grid-cols-4">
@@ -68,7 +65,7 @@ export default function PricingPage() {
         </div>
 
         <div className="container-nova mt-12">
-          <div className="rounded-nova-lg border border-dashed border-ink/20 bg-cream-dark px-6 py-5 text-center sm:px-8">
+          <div className="rounded-nova-lg border border-dashed border-ink/20 bg-white px-6 py-5 text-center sm:px-8">
             <p className="text-sm text-ink-soft">
               Need something more bespoke or strategic? That’s what{' '}
               <a

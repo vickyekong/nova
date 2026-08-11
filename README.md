@@ -19,7 +19,11 @@ Build: `npm run build` · Preview: `npm run preview`
 
 | Decision | Choice |
 |----------|--------|
-| Accent color | Amber-orange `#FF6B35` |
+| Accent | Warm red `#E23D28` |
+| Ink / dark | Outerspace `#2D3436` |
+| Surface | Perfect white `#FFFFFF` |
+
+The site UI uses **only** these three colors (Outerspace may appear at reduced opacity for secondary text).
 | Logo Mart model | **Exclusive sale** — sold logos marked Sold |
 | Payments | **Paystack** Inline (NGN) |
 | Fulfillment | Email within **24 hours** (not instant download yet) |

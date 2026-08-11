@@ -4,25 +4,34 @@ import { Reveal, Stagger, StaggerItem } from '../motion/Reveal';
 
 export function Testimonials() {
   return (
-    <section className="bg-cream-dark py-20 sm:py-24">
+    <section className="border-t border-ink/8 bg-white py-20 sm:py-28">
       <div className="container-nova">
-        <Reveal>
+        <Reveal className="max-w-xl">
           <p className="section-label">From SME owners</p>
-          <h2 className="heading-lg mt-3 max-w-xl">Short stories. Real businesses.</h2>
+          <h2 className="heading-lg mt-3">Short stories. Real businesses.</h2>
         </Reveal>
 
-        <Stagger className="mt-12 grid gap-4 md:grid-cols-3" delay={0.1}>
+        <Stagger
+          className="mt-12 grid gap-px overflow-hidden border border-ink/10 bg-ink/10 md:grid-cols-3"
+          delay={0.08}
+        >
           {testimonials.map((t) => (
             <StaggerItem key={t.id}>
               <motion.blockquote
-                className="flex h-full flex-col rounded-nova-xl border border-ink/8 bg-cream p-6"
-                whileHover={{ y: -4 }}
-                transition={{ type: 'spring', stiffness: 300, damping: 22 }}
+                className="flex h-full flex-col bg-white p-6 sm:p-8"
+                whileHover={{ backgroundColor: '#FFFFFF' }}
                 data-cursor="hover"
               >
-                <span className="font-display text-4xl leading-none text-nova/40">“</span>
-                <p className="mt-2 flex-1 text-base leading-relaxed text-ink">{t.quote}</p>
-                <footer className="mt-6 border-t border-ink/8 pt-4">
+                <p className="flex-1 text-base leading-relaxed text-ink">
+                  “{t.quote}”
+                </p>
+                <footer className="mt-8 flex items-center gap-3 border-t border-ink/10 pt-4">
+                  <img
+                    src={t.avatar}
+                    alt=""
+                    className="h-10 w-10 rounded-full object-cover"
+                    loading="lazy"
+                  />
                   <cite className="not-italic">
                     <span className="block font-display text-sm font-semibold text-ink">
                       {t.name}

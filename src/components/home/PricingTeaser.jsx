@@ -10,21 +10,14 @@ export function PricingTeaser() {
     target: ref,
     offset: ['start end', 'end start'],
   });
-  const y = useTransform(scrollYProgress, [0, 1], [40, -40]);
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.96, 1, 0.96]);
+  const y = useTransform(scrollYProgress, [0, 1], [30, -30]);
 
   return (
-    <section ref={ref} className="relative overflow-hidden py-24 sm:py-28">
-      <div
-        className="pointer-events-none absolute inset-0 bg-ignition-radial"
-        aria-hidden
-      />
-      <motion.div
-        style={{ y, scale }}
-        className="container-nova relative text-center"
-      >
+    <section ref={ref} className="relative overflow-hidden bg-white py-24 sm:py-32">
+      <div className="pointer-events-none absolute left-1/2 top-0 h-px w-3/4 -translate-x-1/2 bg-gradient-to-r from-transparent via-nova/40 to-transparent" />
+      <motion.div style={{ y }} className="container-nova relative text-center">
         <p className="section-label">Pricing</p>
-        <h2 className="heading-lg mt-3">
+        <h2 className="heading-lg mt-4">
           Packages from{' '}
           <span className="price-mono text-nova">{startingPriceLabel}</span>
         </h2>

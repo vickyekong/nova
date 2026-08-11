@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Check, Lock } from 'lucide-react';
 import { SEO } from '../components/SEO';
+import { MockLogo } from '../components/logo-mart/MockLogo';
 import { getLogoById, formatLogoPrice } from '../data/logos';
 import { checkoutLogo, isLogoSold } from '../lib/paystack';
 
@@ -68,17 +69,13 @@ export default function LogoDetailPage() {
         <div className="grid gap-10 lg:grid-cols-2">
           {/* Preview + mockups */}
           <div>
-            <div className="relative flex aspect-square items-center justify-center rounded-nova-lg bg-white p-10 shadow-soft">
-              <div className="flex h-full w-full flex-col items-center justify-center rounded-nova border border-dashed border-ink/10 bg-[#F7F7F5]">
-                <span className="font-mono text-[10px] uppercase tracking-wider text-nova">
-                  [LOGO PREVIEW]
-                </span>
-                <span className="mt-3 max-w-[70%] text-center font-display text-2xl font-bold text-ink/40">
-                  {logo.name}
-                </span>
-              </div>
+            <div
+              className="relative flex aspect-square items-center justify-center rounded-nova-lg p-10 shadow-soft"
+              style={{ backgroundColor: logo.colors?.[2] || '#FFFFFF' }}
+            >
+              <MockLogo logo={logo} size="xl" />
               {sold && (
-                <span className="absolute right-4 top-4 rounded-full bg-ink px-3 py-1 font-mono text-xs font-semibold uppercase text-cream">
+                <span className="absolute right-4 top-4 rounded-full bg-ink px-3 py-1 font-mono text-xs font-semibold uppercase text-white">
                   Sold
                 </span>
               )}
@@ -88,14 +85,22 @@ export default function LogoDetailPage() {
               Context mockups
             </p>
             <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
-              {(logo.mockups?.length ? logo.mockups : [1, 2, 3, 4]).map((_, i) => (
+              {(logo.mockups || []).map((src, i) => (
                 <div
-                  key={i}
-                  className="flex aspect-square items-center justify-center rounded-nova bg-cream-deeper text-center"
+                  key={src}
+                  className="relative aspect-square overflow-hidden rounded-nova bg-white"
                 >
-                  <span className="px-2 font-mono text-[9px] uppercase tracking-wider text-ink/35">
-                    [MOCKUP {i + 1}]
-                  </span>
+                  <img
+                    src={src}
+                    alt={`${logo.name} mockup ${i + 1}`}
+                    className="h-full w-full object-cover"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center bg-ink/25">
+                    <div className="scale-50 rounded-nova bg-white/95 p-2 shadow-soft">
+                      <MockLogo logo={logo} size="sm" />
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
@@ -104,10 +109,10 @@ export default function LogoDetailPage() {
           {/* Buy panel */}
           <div>
             <div className="flex flex-wrap gap-2">
-              <span className="rounded-full bg-cream-dark px-3 py-1 text-xs capitalize text-ink-soft">
+              <span className="rounded-full bg-white px-3 py-1 text-xs capitalize text-ink-soft">
                 {logo.industry}
               </span>
-              <span className="rounded-full bg-cream-dark px-3 py-1 text-xs capitalize text-ink-soft">
+              <span className="rounded-full bg-white px-3 py-1 text-xs capitalize text-ink-soft">
                 {logo.style}
               </span>
               {logo.isNew && !sold && (
@@ -137,13 +142,13 @@ export default function LogoDetailPage() {
               </ul>
             </div>
 
-            <p className="mt-4 rounded-nova bg-cream-dark px-3 py-2 text-xs text-ink-muted">
+            <p className="mt-4 rounded-nova bg-white px-3 py-2 text-xs text-ink-muted">
               Request a tweak: minor color/name changes included. Full redesign
               is not — that’s Starter Identity.
             </p>
 
             {sold ? (
-              <div className="mt-8 rounded-nova-lg border border-ink/10 bg-cream-dark p-6 text-center">
+              <div className="mt-8 rounded-nova-lg border border-ink/10 bg-white p-6 text-center">
                 <Lock className="mx-auto text-ink-muted" size={24} />
                 <p className="mt-3 font-display font-semibold text-ink">
                   This logo is sold
@@ -167,21 +172,21 @@ export default function LogoDetailPage() {
                   placeholder="Your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full rounded-nova border border-ink/15 bg-cream px-3 py-2.5 text-sm outline-none focus:border-nova focus:ring-2 focus:ring-nova/20"
+                  className="w-full rounded-nova border border-ink/15 bg-white px-3 py-2.5 text-sm outline-none focus:border-nova focus:ring-2 focus:ring-nova/20"
                 />
                 <input
                   type="text"
                   placeholder="Business name (for lockup swap)"
                   value={businessName}
                   onChange={(e) => setBusinessName(e.target.value)}
-                  className="w-full rounded-nova border border-ink/15 bg-cream px-3 py-2.5 text-sm outline-none focus:border-nova focus:ring-2 focus:ring-nova/20"
+                  className="w-full rounded-nova border border-ink/15 bg-white px-3 py-2.5 text-sm outline-none focus:border-nova focus:ring-2 focus:ring-nova/20"
                 />
                 <textarea
                   rows={2}
                   placeholder="Tweak notes (optional) — color or name preference"
                   value={tweakNotes}
                   onChange={(e) => setTweakNotes(e.target.value)}
-                  className="w-full resize-y rounded-nova border border-ink/15 bg-cream px-3 py-2.5 text-sm outline-none focus:border-nova focus:ring-2 focus:ring-nova/20"
+                  className="w-full resize-y rounded-nova border border-ink/15 bg-white px-3 py-2.5 text-sm outline-none focus:border-nova focus:ring-2 focus:ring-nova/20"
                 />
                 {error && (
                   <p className="rounded-nova bg-red-50 px-3 py-2 text-sm text-red-700">

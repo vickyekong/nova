@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Check } from 'lucide-react';
 import { SEO } from '../components/SEO';
 import { CTABand } from '../components/CTABand';
+import { PageHero } from '../components/PageHero';
 import { services } from '../data/services';
 
 export default function ServicesPage() {
@@ -13,18 +14,10 @@ export default function ServicesPage() {
         path="/services"
       />
 
-      <section className="border-b border-ink/8 bg-ignition-radial py-14 sm:py-18">
-        <div className="container-nova max-w-3xl">
-          <p className="section-label">Services</p>
-          <h1 className="heading-lg mt-3 text-balance">
-            Packages with a price and a finish line.
-          </h1>
-          <p className="body-lg mt-4">
-            Not bespoke quotes. Not endless discovery calls. Pick a scope, see
-            the number, start.
-          </p>
-        </div>
-      </section>
+      <PageHero label="Services" title="Packages with a price and a finish line.">
+        Not bespoke quotes. Not endless discovery calls. Pick a scope, see the
+        number, start.
+      </PageHero>
 
       <section className="py-14 sm:py-16">
         <div className="container-nova space-y-10">
@@ -35,7 +28,7 @@ export default function ServicesPage() {
               className={`scroll-mt-28 rounded-nova-lg border p-6 sm:p-8 ${
                 s.featured
                   ? 'border-nova/40 bg-nova/[0.04] shadow-soft'
-                  : 'border-ink/8 bg-cream'
+                  : 'border-ink/8 bg-white'
               }`}
             >
               <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
@@ -57,7 +50,7 @@ export default function ServicesPage() {
                   </ul>
                 </div>
 
-                <div className="shrink-0 rounded-nova border border-ink/8 bg-cream-dark p-5 lg:w-56">
+                <div className="shrink-0 rounded-nova border border-ink/8 bg-white p-5 lg:w-56">
                   <p className="text-xs text-ink-muted">Starting at</p>
                   <p className="price-mono mt-1 text-2xl text-ink">{s.priceLabel}</p>
                   <p className="mt-3 text-xs text-ink-muted">
@@ -78,7 +71,7 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      <section className="border-t border-ink/8 bg-cream-dark py-12">
+      <section className="border-t border-ink/8 bg-white py-12">
         <div className="container-nova flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="heading-md">Need a logo today?</h2>

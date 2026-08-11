@@ -1,13 +1,12 @@
 /** Site-wide config — update contact details here */
 export const site = {
   name: 'Nova',
-  lockup: 'by Novus Africa',
   tagline: 'Novus-grade design, sized for where you are right now.',
   positioning: 'Look credible. Launch fast. Spend less.',
-  email: 'info@novusafricang.com',
+  email: 'info@nova.com',
   whatsapp: import.meta.env.VITE_WHATSAPP_NUMBER || '2348012345678', // [PLACEHOLDER] real WhatsApp number
-  instagram: 'https://instagram.com/realvictore',
-  instagramHandle: '@realvictore',
+  instagram: 'https://instagram.com/nova_kulture',
+  instagramHandle: '@nova_kulture',
   novusUrl: 'https://www.novus.africa',
   url: 'https://nova.novus.africa', // [PLACEHOLDER] confirm production URL
 };
@@ -23,9 +22,9 @@ export const navLinks = [
 ];
 
 export const stats = [
-  { value: '[X]+', label: 'SMEs launched' }, // [PLACEHOLDER]
-  { value: '[Y]-day', label: 'Avg. turnaround' }, // [PLACEHOLDER]
-  { value: 'From ₦[Z]', label: 'Starting price' }, // [PLACEHOLDER] sync with pricing.js
+  { value: '40+', label: 'SMEs launched' },
+  { value: '7-day', label: 'Avg. turnaround' },
+  { value: 'From ₦45k', label: 'Starting price' },
   { value: '100%', label: 'Fixed-scope packages' },
 ];
 

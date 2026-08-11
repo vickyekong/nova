@@ -4,43 +4,47 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Perfect white
         cream: {
-          DEFAULT: '#FAF8F4',
-          dark: '#F0EBE3',
-          deeper: '#E8E2D8',
+          DEFAULT: '#FFFFFF',
+          dark: '#FFFFFF',
+          deeper: '#FFFFFF',
         },
+        // Outerspace — solid + alpha mixes only (no foreign greys)
         ink: {
-          DEFAULT: '#1A1A1A',
-          soft: '#3D3D3D',
-          muted: '#6B6B6B',
+          DEFAULT: '#2D3436',
+          soft: 'rgb(45 52 54 / 0.72)',
+          muted: 'rgb(45 52 54 / 0.5)',
         },
+        // Warm red
         nova: {
-          DEFAULT: '#FF6B35',
-          dark: '#E85A28',
-          light: '#FF8A5C',
-          glow: 'rgba(255, 107, 53, 0.25)',
+          DEFAULT: '#E23D28',
+          dark: '#E23D28',
+          light: '#E23D28',
+          glow: 'rgb(226 61 40 / 0.28)',
+          ice: '#FFFFFF',
         },
       },
       fontFamily: {
-        display: ['Satoshi', 'system-ui', 'sans-serif'],
-        sans: ['DM Sans', 'system-ui', 'sans-serif'],
+        display: ['Clash Display', 'Satoshi', 'system-ui', 'sans-serif'],
+        sans: ['Satoshi', 'DM Sans', 'system-ui', 'sans-serif'],
         mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
       },
       borderRadius: {
-        nova: '12px',
-        'nova-lg': '16px',
-        'nova-xl': '24px',
+        nova: '8px',
+        'nova-lg': '12px',
+        'nova-xl': '16px',
       },
       boxShadow: {
-        spark: '0 0 0 4px rgba(255, 107, 53, 0.15), 0 8px 24px rgba(255, 107, 53, 0.2)',
-        soft: '0 4px 24px rgba(26, 26, 26, 0.06)',
-        lift: '0 20px 50px rgba(26, 26, 26, 0.12)',
+        spark: '0 0 0 3px rgb(226 61 40 / 0.2), 0 10px 28px rgb(226 61 40 / 0.2)',
+        soft: '0 8px 30px rgb(45 52 54 / 0.08)',
+        lift: '0 24px 60px rgb(45 52 54 / 0.14)',
       },
       backgroundImage: {
         'ignition-radial':
-          'radial-gradient(ellipse 80% 50% at 70% 20%, rgba(255, 107, 53, 0.12), transparent 60%)',
+          'radial-gradient(ellipse 70% 55% at 85% 15%, rgb(226 61 40 / 0.14), transparent 58%)',
         'ignition-line':
-          'linear-gradient(135deg, transparent 40%, rgba(255, 107, 53, 0.08) 50%, transparent 60%)',
+          'linear-gradient(115deg, transparent 42%, rgb(226 61 40 / 0.12) 50%, transparent 58%)',
       },
       keyframes: {
         marquee: {
@@ -57,7 +61,7 @@ export default {
         },
         'pulse-ring': {
           '0%': { transform: 'scale(0.9)', opacity: '0.5' },
-          '100%': { transform: 'scale(1.35)', opacity: '0' },
+          '100%': { transform: 'scale(1.4)', opacity: '0' },
         },
       },
       animation: {

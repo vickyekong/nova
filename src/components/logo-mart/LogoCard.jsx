@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { formatLogoPrice } from '../../data/logos';
 import { isLogoSold } from '../../lib/paystack';
 import { cn } from '../../lib/utils';
+import { MockLogo } from './MockLogo';
 
 export function LogoCard({ logo }) {
   const sold = isLogoSold(logo);
@@ -15,21 +16,18 @@ export function LogoCard({ logo }) {
     >
       <motion.div
         className="overflow-hidden rounded-nova-lg border border-ink/8 bg-white"
-        whileHover={{ y: -6, borderColor: 'rgba(255,107,53,0.35)' }}
+        whileHover={{ y: -6, borderColor: 'rgba(226,61,40,0.4)' }}
         transition={{ type: 'spring', stiffness: 320, damping: 22 }}
       >
-        <div className="relative flex aspect-square items-center justify-center bg-[#F7F7F5] p-8">
+        <div
+          className="relative flex aspect-square items-center justify-center p-6"
+          style={{ backgroundColor: logo.colors?.[2] || '#FFFFFF' }}
+        >
           <motion.div
-            className="flex h-full w-full flex-col items-center justify-center rounded-nova bg-white shadow-sm"
-            whileHover={{ scale: 1.04 }}
+            whileHover={{ scale: 1.05 }}
             transition={{ type: 'spring', stiffness: 260, damping: 18 }}
           >
-            <span className="font-mono text-[9px] uppercase tracking-wider text-ink/30">
-              [LOGO THUMBNAIL]
-            </span>
-            <span className="mt-2 max-w-[80%] text-center font-display text-sm font-semibold text-ink/50">
-              {logo.name}
-            </span>
+            <MockLogo logo={logo} size="md" />
           </motion.div>
 
           <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
@@ -39,7 +37,7 @@ export function LogoCard({ logo }) {
               </span>
             )}
             {sold && (
-              <span className="rounded-full bg-ink px-2 py-0.5 font-mono text-[10px] font-semibold uppercase text-cream">
+              <span className="rounded-full bg-ink px-2 py-0.5 font-mono text-[10px] font-semibold uppercase text-white">
                 Sold
               </span>
             )}

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { motion, useMotionValue, useSpring, useReducedMotion } from 'framer-motion';
 
 /**
- * Desktop-only ignition cursor — a soft amber spark that follows the pointer.
+ * Desktop-only warm-red cursor spark.
  * Hidden on touch / reduced-motion.
  */
 export function CursorSpark() {
@@ -55,7 +55,7 @@ export function CursorSpark() {
       style={{ x: sx, y: sy, translateX: '-50%', translateY: '-50%' }}
     >
       <motion.div
-        className="rounded-full bg-nova/35"
+        className="rounded-full bg-nova/40"
         animate={{
           width: hovering ? 48 : 18,
           height: hovering ? 48 : 18,

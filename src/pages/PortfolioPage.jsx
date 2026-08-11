@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { SEO } from '../components/SEO';
 import { CTABand } from '../components/CTABand';
+import { PageHero } from '../components/PageHero';
 import { portfolio, portfolioFilters } from '../data/portfolio';
 import { cn } from '../lib/utils';
 
@@ -20,16 +21,9 @@ export default function PortfolioPage() {
         path="/portfolio"
       />
 
-      <section className="border-b border-ink/8 bg-ignition-radial py-14">
-        <div className="container-nova max-w-3xl">
-          <p className="section-label">Portfolio</p>
-          <h1 className="heading-lg mt-3">Transformation stories, not mood boards.</h1>
-          <p className="body-lg mt-4">
-            SMEs respond to before → after. Here’s the work — swap in real case
-            studies before launch.
-          </p>
-        </div>
-      </section>
+      <PageHero label="Portfolio" title="Transformation stories, not mood boards.">
+        SMEs respond to before → after. Here’s a sample of the work.
+      </PageHero>
 
       <section className="py-12 sm:py-16">
         <div className="container-nova">
@@ -43,7 +37,7 @@ export default function PortfolioPage() {
                   'rounded-full px-4 py-2 text-sm font-medium transition-colors',
                   filter === f.id
                     ? 'bg-nova text-white'
-                    : 'bg-cream-dark text-ink-soft hover:bg-cream-deeper',
+                    : 'border border-ink/20 bg-white text-ink hover:border-nova hover:text-nova',
                 )}
               >
                 {f.label}
@@ -53,14 +47,14 @@ export default function PortfolioPage() {
 
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {items.map((item) => (
-              <article key={item.id}>
-                <div className="flex aspect-[4/3] flex-col items-center justify-center rounded-nova-lg bg-cream-deeper p-6 text-center">
-                  <span className="font-mono text-[10px] uppercase tracking-wider text-nova">
-                    [CASE STUDY IMAGE]
-                  </span>
-                  <span className="mt-2 font-display text-lg font-semibold text-ink/35">
-                    {item.title}
-                  </span>
+              <article key={item.id} className="group">
+                <div className="relative aspect-[4/3] overflow-hidden rounded-nova-lg bg-white">
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
+                  />
                 </div>
                 <div className="mt-4 space-y-2">
                   <p className="font-mono text-[10px] uppercase tracking-wider text-ink-muted">
