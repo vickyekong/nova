@@ -3,8 +3,11 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Check, Lock } from 'lucide-react';
 import { SEO } from '../components/SEO';
 import { MockLogo } from '../components/logo-mart/MockLogo';
-import { getLogoById, formatLogoPrice } from '../data/logos';
+import { TextAreaField, TextField } from '../components/ui/Field';
+import { getLogoById } from '../data/logos';
+import { logoSurface } from '../lib/brand';
 import { checkoutLogo, isLogoSold } from '../lib/paystack';
+import { formatNaira } from '../lib/utils';
 
 export default function LogoDetailPage() {
   const { id } = useParams();
@@ -54,7 +57,7 @@ export default function LogoDetailPage() {
     <>
       <SEO
         title={`${logo.name} — Logo Mart`}
-        description={`Exclusive ready-to-buy logo: ${logo.name}. ${formatLogoPrice(logo.price)}. Delivered within 24 hours after Paystack checkout.`}
+        description={`Exclusive ready-to-buy logo: ${logo.name}. ${formatNaira(logo.price)}. Delivered within 24 hours after Paystack checkout.`}
         path={`/logo-mart/${logo.id}`}
       />
 
@@ -71,7 +74,7 @@ export default function LogoDetailPage() {
           <div>
             <div
               className="relative flex aspect-square items-center justify-center rounded-nova-lg p-10 shadow-soft"
-              style={{ backgroundColor: logo.colors?.[2] || '#FFFFFF' }}
+              style={{ backgroundColor: logoSurface(logo) }}
             >
               <MockLogo logo={logo} size="xl" />
               {sold && (
@@ -124,7 +127,7 @@ export default function LogoDetailPage() {
 
             <h1 className="heading-lg mt-4">{logo.name}</h1>
             <p className="price-mono mt-3 text-3xl text-nova">
-              {formatLogoPrice(logo.price)}
+              {formatNaira(logo.price)}
             </p>
             <p className="mt-4 text-ink-soft leading-relaxed">{logo.description}</p>
 
@@ -166,27 +169,24 @@ export default function LogoDetailPage() {
                 className="mt-8 space-y-3 rounded-nova-lg border border-ink/10 bg-white p-5 shadow-soft"
               >
                 <h2 className="font-display font-semibold text-ink">Buy this logo</h2>
-                <input
+                <TextField
                   type="email"
                   required
                   placeholder="Your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full rounded-nova border border-ink/15 bg-white px-3 py-2.5 text-sm outline-none focus:border-nova focus:ring-2 focus:ring-nova/20"
                 />
-                <input
+                <TextField
                   type="text"
                   placeholder="Business name (for lockup swap)"
                   value={businessName}
                   onChange={(e) => setBusinessName(e.target.value)}
-                  className="w-full rounded-nova border border-ink/15 bg-white px-3 py-2.5 text-sm outline-none focus:border-nova focus:ring-2 focus:ring-nova/20"
                 />
-                <textarea
+                <TextAreaField
                   rows={2}
                   placeholder="Tweak notes (optional) — color or name preference"
                   value={tweakNotes}
                   onChange={(e) => setTweakNotes(e.target.value)}
-                  className="w-full resize-y rounded-nova border border-ink/15 bg-white px-3 py-2.5 text-sm outline-none focus:border-nova focus:ring-2 focus:ring-nova/20"
                 />
                 {error && (
                   <p className="rounded-nova bg-red-50 px-3 py-2 text-sm text-red-700">
@@ -194,7 +194,7 @@ export default function LogoDetailPage() {
                   </p>
                 )}
                 <button type="submit" disabled={loading} className="btn-primary w-full">
-                  {loading ? 'Opening Paystack…' : `Buy This Logo · ${formatLogoPrice(logo.price)}`}
+                  {loading ? 'Opening Paystack…' : `Buy This Logo · ${formatNaira(logo.price)}`}
                 </button>
                 <p className="text-center text-[11px] text-ink-muted">
                   Exclusive · Paid via Paystack · Files emailed within 24 hrs

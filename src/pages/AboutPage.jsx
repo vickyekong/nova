@@ -3,6 +3,7 @@ import { ArrowRight } from 'lucide-react';
 import { SEO } from '../components/SEO';
 import { CTABand } from '../components/CTABand';
 import { PageHero } from '../components/PageHero';
+import { ExternalLink } from '../components/ui/ExternalLink';
 import { site } from '../data/site';
 
 export default function AboutPage() {
@@ -38,14 +39,12 @@ export default function AboutPage() {
           <div className="space-y-6">
             <h2 className="heading-md">Why we exist</h2>
             <p className="text-ink-soft leading-relaxed">
-              <a
+              <ExternalLink
                 href={site.novusUrl}
                 className="font-medium text-nova hover:underline"
-                target="_blank"
-                rel="noopener noreferrer"
               >
                 Novus Africa
-              </a>{' '}
+              </ExternalLink>{' '}
               is the flagship — premium, strategic, editorial. Nova is the
               accessible arm: same craft standards, smaller scope, faster
               delivery, clear fixed pricing.
@@ -59,9 +58,7 @@ export default function AboutPage() {
 
       <section className="bg-ink py-14 text-white">
         <div className="container-nova max-w-2xl">
-          <p className="font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-nova">
-            The idea
-          </p>
+          <p className="section-label">The idea</p>
           <h2 className="mt-3 font-display text-xl font-semibold tracking-tight text-white sm:text-2xl">
             Ignition
           </h2>

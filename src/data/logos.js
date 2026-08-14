@@ -247,7 +247,3 @@ export const logos = [
 export function getLogoById(id) {
   return logos.find((l) => l.id === id);
 }
-
-export function formatLogoPrice(naira) {
-  return `₦${Number(naira).toLocaleString('en-NG')}`;
-}

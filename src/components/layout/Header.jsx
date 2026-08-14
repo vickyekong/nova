@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Logo } from '../Logo';
 import { MagneticLink } from '../motion/MagneticLink';
 import { navLinks } from '../../data/site';
+import { collapse, EASE } from '../../lib/motion';
 import { cn } from '../../lib/utils';
 
 export function Header() {
@@ -101,10 +102,8 @@ export function Header() {
         {open && (
           <motion.div
             className="border-t border-ink/8 bg-white lg:hidden"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+            {...collapse}
+            transition={{ duration: 0.28, ease: EASE }}
           >
             <div className="container-nova flex flex-col gap-1 overflow-hidden py-4">
               {navLinks.map((link, i) => (

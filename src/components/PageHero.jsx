@@ -13,9 +13,7 @@ export function PageHero({ label, title, children }) {
         <Reveal>
           <div className="mb-4 flex items-center gap-3">
             <span className="h-2 w-2 rounded-full bg-nova" />
-            <p className="font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-nova">
-              {label}
-            </p>
+            <p className="section-label">{label}</p>
           </div>
           <h1 className="font-display text-[clamp(1.85rem,4.5vw,3.25rem)] font-semibold leading-[1.05] tracking-[-0.03em] text-white text-balance">
             {title}

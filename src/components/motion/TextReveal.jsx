@@ -1,4 +1,5 @@
 import { motion, useReducedMotion } from 'framer-motion';
+import { EASE } from '../../lib/motion';
 
 /** Staggered word reveal for headlines */
 export function TextReveal({ text, className, as = 'h1', delay = 0 }) {
@@ -22,7 +23,7 @@ export function TextReveal({ text, className, as = 'h1', delay = 0 }) {
             transition={{
               duration: 0.7,
               delay: delay + i * 0.055,
-              ease: [0.22, 1, 0.36, 1],
+              ease: EASE,
             }}
           >
             {word}

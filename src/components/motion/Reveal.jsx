@@ -1,4 +1,5 @@
 import { motion, useReducedMotion } from 'framer-motion';
+import { EASE } from '../../lib/motion';
 
 const defaults = {
   hidden: { opacity: 0, y: 28 },
@@ -26,7 +27,7 @@ export function Reveal({
       initial={{ opacity: 0, y }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once, margin: '-8% 0px' }}
-      transition={{ duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.55, delay, ease: EASE }}
     >
       {children}
     </Comp>
@@ -66,7 +67,7 @@ export function StaggerItem({ children, className }) {
         hidden: defaults.hidden,
         show: {
           ...defaults.show,
-          transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
+          transition: { duration: 0.5, ease: EASE },
         },
       }}
     >

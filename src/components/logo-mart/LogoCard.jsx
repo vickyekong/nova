@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { formatLogoPrice } from '../../data/logos';
+import { logoSurface } from '../../lib/brand';
+import { SPRING } from '../../lib/motion';
 import { isLogoSold } from '../../lib/paystack';
-import { cn } from '../../lib/utils';
+import { cn, formatNaira } from '../../lib/utils';
 import { MockLogo } from './MockLogo';
 
 export function LogoCard({ logo }) {
@@ -17,11 +18,11 @@ export function LogoCard({ logo }) {
       <motion.div
         className="overflow-hidden rounded-nova-lg border border-ink/8 bg-white"
         whileHover={{ y: -6, borderColor: 'rgba(226,61,40,0.4)' }}
-        transition={{ type: 'spring', stiffness: 320, damping: 22 }}
+        transition={SPRING}
       >
         <div
           className="relative flex aspect-square items-center justify-center p-6"
-          style={{ backgroundColor: logo.colors?.[2] || '#FFFFFF' }}
+          style={{ backgroundColor: logoSurface(logo) }}
         >
           <motion.div
             whileHover={{ scale: 1.05 }}
@@ -54,7 +55,7 @@ export function LogoCard({ logo }) {
             </p>
           </div>
           <p className="price-mono shrink-0 text-sm text-ink">
-            {formatLogoPrice(logo.price)}
+            {formatNaira(logo.price)}
           </p>
         </div>
       </motion.div>

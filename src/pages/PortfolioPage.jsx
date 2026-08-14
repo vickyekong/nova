@@ -2,8 +2,8 @@ import { useMemo, useState } from 'react';
 import { SEO } from '../components/SEO';
 import { CTABand } from '../components/CTABand';
 import { PageHero } from '../components/PageHero';
+import { FilterPills } from '../components/ui/FilterPills';
 import { portfolio, portfolioFilters } from '../data/portfolio';
-import { cn } from '../lib/utils';
 
 export default function PortfolioPage() {
   const [filter, setFilter] = useState('all');
@@ -27,23 +27,12 @@ export default function PortfolioPage() {
 
       <section className="py-12 sm:py-16">
         <div className="container-nova">
-          <div className="flex flex-wrap gap-2">
-            {portfolioFilters.map((f) => (
-              <button
-                key={f.id}
-                type="button"
-                onClick={() => setFilter(f.id)}
-                className={cn(
-                  'rounded-full px-4 py-2 text-sm font-medium transition-colors',
-                  filter === f.id
-                    ? 'bg-nova text-white'
-                    : 'border border-ink/20 bg-white text-ink hover:border-nova hover:text-nova',
-                )}
-              >
-                {f.label}
-              </button>
-            ))}
-          </div>
+          <FilterPills
+            options={portfolioFilters}
+            value={filter}
+            onChange={setFilter}
+            variant="round"
+          />
 
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {items.map((item) => (

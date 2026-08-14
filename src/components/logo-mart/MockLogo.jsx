@@ -1,10 +1,8 @@
+import { logoColors } from '../../lib/brand';
+
 /** Renders a mock logo mark from catalogue metadata */
 export function MockLogo({ logo, size = 'md', className = '' }) {
-  const [primary, secondary = '#2D3436', surface = '#FFFFFF'] = logo.colors || [
-    '#E23D28',
-    '#2D3436',
-    '#FFFFFF',
-  ];
+  const [primary, secondary, surface] = logoColors(logo);
   const mark = logo.mark || logo.style || 'lettermark';
 
   const sizes = {

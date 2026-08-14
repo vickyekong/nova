@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { whyNova } from '../../data/site';
 import { Reveal } from '../motion/Reveal';
+import { Collapse } from '../ui/Collapse';
 
 export function WhyNova() {
   const [active, setActive] = useState(0);
@@ -54,20 +54,14 @@ export function WhyNova() {
                       >
                         {item.title}
                       </h3>
-                      <AnimatePresence initial={false}>
-                        {isActive && (
-                          <motion.p
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: 'auto' }}
-                            exit={{ opacity: 0, height: 0 }}
-                            className="overflow-hidden text-sm leading-relaxed text-ink-soft sm:text-base"
-                          >
-                            <span className="mt-3 block max-w-xl border-l-2 border-nova pl-4">
-                              {item.body}
-                            </span>
-                          </motion.p>
-                        )}
-                      </AnimatePresence>
+                      <Collapse
+                        open={isActive}
+                        className="text-sm leading-relaxed text-ink-soft sm:text-base"
+                      >
+                        <p className="mt-3 max-w-xl border-l-2 border-nova pl-4">
+                          {item.body}
+                        </p>
+                      </Collapse>
                     </div>
                   </button>
                 );

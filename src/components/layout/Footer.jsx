@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { ArrowUpRight } from 'lucide-react';
 import { InstagramIcon } from '../icons';
 import { Logo } from '../Logo';
+import { ExternalLink } from '../ui/ExternalLink';
 import { site, navLinks } from '../../data/site';
 import { services } from '../../data/services';
 
@@ -20,9 +21,7 @@ export function Footer() {
           </div>
 
           <div>
-            <p className="font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-nova">
-              Explore
-            </p>
+            <p className="section-label">Explore</p>
             <ul className="mt-4 space-y-2">
               {navLinks.map((l) => (
                 <li key={l.path}>
@@ -38,9 +37,7 @@ export function Footer() {
           </div>
 
           <div>
-            <p className="font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-nova">
-              Packages
-            </p>
+            <p className="section-label">Packages</p>
             <ul className="mt-4 space-y-2">
               {services.map((s) => (
                 <li key={s.id}>
@@ -56,9 +53,7 @@ export function Footer() {
           </div>
 
           <div>
-            <p className="font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-nova">
-              Contact
-            </p>
+            <p className="section-label">Contact</p>
             <ul className="mt-4 space-y-3 text-sm text-white/60">
               <li>
                 <a
@@ -69,30 +64,26 @@ export function Footer() {
                 </a>
               </li>
               <li>
-                <a
+                <ExternalLink
                   href={site.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 transition-colors hover:text-nova"
                 >
                   <InstagramIcon size={16} />
                   {site.instagramHandle}
-                </a>
+                </ExternalLink>
               </li>
             </ul>
           </div>
         </div>
 
         <div className="mt-12 flex flex-col gap-4 border-t border-white/10 pt-8 sm:flex-row sm:items-center sm:justify-between">
-          <a
+          <ExternalLink
             href={site.novusUrl}
-            target="_blank"
-            rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 text-sm font-medium text-white/75 transition-colors hover:text-nova"
           >
             Ready for the next level? Meet Novus Africa
             <ArrowUpRight size={16} />
-          </a>
+          </ExternalLink>
           <p className="text-xs text-white/35">
             © {new Date().getFullYear()} Nova. All rights reserved.
           </p>

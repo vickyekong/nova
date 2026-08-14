@@ -7,6 +7,8 @@ import { CTABand } from '../components/CTABand';
 import { PageHero } from '../components/PageHero';
 import { LogoCard } from '../components/logo-mart/LogoCard';
 import { Stagger, StaggerItem } from '../components/motion/Reveal';
+import { Collapse } from '../components/ui/Collapse';
+import { FilterPills } from '../components/ui/FilterPills';
 import {
   logos,
   logoIndustries,
@@ -75,41 +77,18 @@ export default function LogoMartPage() {
       <section className="py-12 sm:py-14">
         <div className="container-nova">
           <div className="space-y-4">
-            <div className="flex flex-wrap gap-2">
-              {logoIndustries.map((i) => (
-                <button
-                  key={i.id}
-                  type="button"
-                  onClick={() => setIndustry(i.id)}
-                  data-cursor="hover"
-                  className={cn(
-                    'rounded-nova px-3.5 py-2 text-sm font-medium transition-colors',
-                    industry === i.id
-                      ? 'bg-nova text-white'
-                      : 'border border-ink/20 bg-white text-ink hover:border-nova hover:text-nova',
-                  )}
-                >
-                  {i.label}
-                </button>
-              ))}
-            </div>
-            <div className="flex flex-wrap items-center gap-2">
-              {logoStyles.map((s) => (
-                <button
-                  key={s.id}
-                  type="button"
-                  onClick={() => setStyle(s.id)}
-                  data-cursor="hover"
-                  className={cn(
-                    'rounded-nova border px-3 py-1.5 text-xs font-medium transition-colors',
-                    style === s.id
-                      ? 'border-nova bg-nova/10 text-nova'
-                      : 'border-ink/10 text-ink-muted hover:border-ink/20',
-                  )}
-                >
-                  {s.label}
-                </button>
-              ))}
+            <FilterPills
+              options={logoIndustries}
+              value={industry}
+              onChange={setIndustry}
+            />
+            <FilterPills
+              options={logoStyles}
+              value={style}
+              onChange={setStyle}
+              variant="subtle"
+              className="items-center"
+            >
               <select
                 value={sort}
                 onChange={(e) => setSort(e.target.value)}
@@ -121,7 +100,7 @@ export default function LogoMartPage() {
                 <option value="price-asc">Price: low → high</option>
                 <option value="price-desc">Price: high → low</option>
               </select>
-            </div>
+            </FilterPills>
           </div>
 
           <p className="mt-5 text-sm text-ink-muted">
@@ -186,18 +165,12 @@ export default function LogoMartPage() {
                     )}
                   />
                 </button>
-                <AnimatePresence initial={false}>
-                  {openFaq === i && (
-                    <motion.p
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      className="overflow-hidden border-t border-ink/5 px-4 text-sm leading-relaxed text-ink-soft"
-                    >
-                      <span className="block pb-4 pt-2">{item.a}</span>
-                    </motion.p>
-                  )}
-                </AnimatePresence>
+                <Collapse
+                  open={openFaq === i}
+                  className="border-t border-ink/5 px-4 text-sm leading-relaxed text-ink-soft"
+                >
+                  <p className="pb-4 pt-2">{item.a}</p>
+                </Collapse>
               </div>
             ))}
           </div>

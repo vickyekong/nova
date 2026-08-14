@@ -1,3 +1,4 @@
+import { formatNaira } from '../lib/utils';
 import { services } from './services';
 
 /** Pricing tiers — keep in sync with services.js */
@@ -20,7 +21,7 @@ export const pricingNote = {
 
 /** Lowest package price for teasers — update when prices change */
 export const startingPrice = Math.min(...services.map((s) => s.priceFrom));
-export const startingPriceLabel = `₦${startingPrice.toLocaleString('en-NG')}`;
+export const startingPriceLabel = formatNaira(startingPrice);
 
 export const budgetRanges = [
   { value: 'under-50k', label: 'Under ₦50,000' },
