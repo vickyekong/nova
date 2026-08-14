@@ -6,7 +6,7 @@ import { MockLogo } from '../components/logo-mart/MockLogo';
 import { TextAreaField, TextField } from '../components/ui/Field';
 import { getLogoById } from '../data/logos';
 import { logoSurface } from '../lib/brand';
-import { checkoutLogo, isLogoSold } from '../lib/paystack';
+import { CHECKOUT_CANCELLED, checkoutLogo, isLogoSold } from '../lib/paystack';
 import { formatNaira } from '../lib/utils';
 
 export default function LogoDetailPage() {
@@ -45,8 +45,12 @@ export default function LogoDetailPage() {
       });
       navigate(`/logo-mart/success?ref=${reference}&logo=${logo.id}`);
     } catch (err) {
-      if (err.message !== 'Payment cancelled') {
-        setError(err.message);
+      if (err?.code !== CHECKOUT_CANCELLED) {
+        console.error('[Nova] Logo checkout failed.', err);
+        setError(
+          err?.message ||
+            'Checkout failed. Try again, or contact us on WhatsApp to buy this logo.',
+        );
       }
     } finally {
       setLoading(false);
