@@ -39,6 +39,12 @@ See `.env.example`:
 
 **Production note:** Logo “sold” status uses data in `src/data/logos.js` plus a localStorage fallback after client checkout. For real exclusivity, add a Paystack webhook + backend that flips `status` to `sold` on `charge.success`.
 
+## Security notes
+
+- Only `VITE_*` values reach the browser — never put a Paystack **secret** key (`sk_…`) or Formspree API token in `.env`; `VITE_PAYSTACK_PUBLIC_KEY` is public by design.
+- `vercel.json` sets CSP and hardening headers. When adding a third-party script, image host, or API, add its origin to the matching CSP directive or it will be blocked.
+- **Unverified by design (needs a backend):** checkout amount, logo identity and “sold” state are all client-supplied, so a tampered browser can pay the wrong amount or re-buy a sold logo. Verify every `charge.success` server-side against the catalogue price before delivering files.
+
 ## CMS-lite data files
 
 Edit these without touching layout:
