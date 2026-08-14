@@ -2,9 +2,40 @@ import { validateContactForm, cleanText, LIMITS } from './validation';
 
 const FORMSPREE_ID = import.meta.env.VITE_FORMSPREE_ID;
 
+const FALLBACK_MESSAGE = 'Something went wrong. Try WhatsApp instead.';
+
 /** Formspree IDs are short alphanumeric slugs; anything else is a misconfiguration. */
-function isConfigured(id) {
-  return typeof id === 'string' && /^[A-Za-z0-9]{4,32}$/.test(id) && id !== 'your_formspree_id';
+function isConfigured() {
+  return (
+    typeof FORMSPREE_ID === 'string' &&
+    /^[A-Za-z0-9]{4,32}$/.test(FORMSPREE_ID) &&
+    FORMSPREE_ID !== 'your_formspree_id'
+  );
+}
+
+/** Formspree replies with `{ errors: [{ field, message }] }` on validation failures. */
+async function readErrorMessage(res) {
+  let body;
+  try {
+    body = await res.json();
+  } catch (err) {
+    console.error(`[Nova] Formspree returned ${res.status} with an unreadable body.`, err);
+    return `${FALLBACK_MESSAGE} (error ${res.status})`;
+  }
+
+  const fromErrors = Array.isArray(body?.errors)
+    ? body.errors
+        .map((e) => e?.message)
+        .filter((message) => typeof message === 'string' && message)
+        .join(' ')
+    : '';
+  const message = fromErrors || (typeof body?.error === 'string' ? body.error : '');
+
+  if (!message) {
+    console.error(`[Nova] Formspree returned ${res.status}.`, body);
+    return `${FALLBACK_MESSAGE} (error ${res.status})`;
+  }
+  return cleanText(message, LIMITS.shortText);
 }
 
 /**
@@ -22,9 +53,10 @@ export async function submitContactForm(input) {
     _subject: cleanText(input._subject, LIMITS.shortText),
   };
 
-  if (!isConfigured(FORMSPREE_ID)) {
-    // Dev / pre-config fallback — never log the submission itself (contains PII)
-    console.info('[Nova contact form] Formspree not configured — submission not sent.');
+  if (!isConfigured()) {
+    // Dev / pre-config fallback. Never log the submission itself — it contains PII.
+    const warn = import.meta.env.PROD ? console.error : console.info;
+    warn('[Nova] VITE_FORMSPREE_ID is not set — contact form submission was not delivered.');
     await new Promise((r) => setTimeout(r, 600));
     return {
       ok: true,
@@ -34,22 +66,25 @@ export async function submitContactForm(input) {
     };
   }
 
-  const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(payload),
-  });
+  let res;
+  try {
+    res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+  } catch (err) {
+    console.error('[Nova] Contact form request failed to reach Formspree.', err);
+    throw new Error('Couldn’t reach the server. Check your connection or use WhatsApp.', {
+      cause: err,
+    });
+  }
 
   if (!res.ok) {
-    const data = await res.json().catch(() => ({}));
-    throw new Error(
-      typeof data.error === 'string' && data.error
-        ? cleanText(data.error, LIMITS.shortText)
-        : 'Something went wrong. Try WhatsApp instead.',
-    );
+    throw new Error(await readErrorMessage(res));
   }
 
   return { ok: true, demo: false };

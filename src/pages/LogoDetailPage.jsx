@@ -4,7 +4,7 @@ import { ArrowLeft, Check, Lock } from 'lucide-react';
 import { SEO } from '../components/SEO';
 import { MockLogo } from '../components/logo-mart/MockLogo';
 import { getLogoById, formatLogoPrice } from '../data/logos';
-import { checkoutLogo, isLogoSold } from '../lib/paystack';
+import { CHECKOUT_CANCELLED, checkoutLogo, isLogoSold } from '../lib/paystack';
 import { LIMITS } from '../lib/validation';
 
 export default function LogoDetailPage() {
@@ -44,8 +44,12 @@ export default function LogoDetailPage() {
       const query = new URLSearchParams({ ref: reference, logo: logo.id });
       navigate(`/logo-mart/success?${query}`);
     } catch (err) {
-      if (err.message !== 'Payment cancelled') {
-        setError(err.message);
+      if (err?.code !== CHECKOUT_CANCELLED) {
+        console.error('[Nova] Logo checkout failed.', err);
+        setError(
+          err?.message ||
+            'Checkout failed. Try again, or contact us on WhatsApp to buy this logo.',
+        );
       }
     } finally {
       setLoading(false);
