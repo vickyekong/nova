@@ -3,10 +3,11 @@ import { CheckCircle2 } from 'lucide-react';
 import { SEO } from '../components/SEO';
 import { getLogoById } from '../data/logos';
 import { site } from '../data/site';
+import { cleanText } from '../lib/validation';
 
 export default function CheckoutSuccessPage() {
   const [params] = useSearchParams();
-  const ref = params.get('ref');
+  const ref = cleanText(params.get('ref'), 64);
   const logoId = params.get('logo');
   const logo = logoId ? getLogoById(logoId) : null;
 

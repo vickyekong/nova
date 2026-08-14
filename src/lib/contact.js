@@ -1,9 +1,16 @@
+import { validateContactForm, cleanText, LIMITS } from './validation';
+
 const FORMSPREE_ID = import.meta.env.VITE_FORMSPREE_ID;
 
 const FALLBACK_MESSAGE = 'Something went wrong. Try WhatsApp instead.';
 
+/** Formspree IDs are short alphanumeric slugs; anything else is a misconfiguration. */
 function isConfigured() {
-  return Boolean(FORMSPREE_ID) && FORMSPREE_ID !== 'your_formspree_id';
+  return (
+    typeof FORMSPREE_ID === 'string' &&
+    /^[A-Za-z0-9]{4,32}$/.test(FORMSPREE_ID) &&
+    FORMSPREE_ID !== 'your_formspree_id'
+  );
 }
 
 /** Formspree replies with `{ errors: [{ field, message }] }` on validation failures. */
@@ -19,30 +26,37 @@ async function readErrorMessage(res) {
   const fromErrors = Array.isArray(body?.errors)
     ? body.errors
         .map((e) => e?.message)
-        .filter(Boolean)
+        .filter((message) => typeof message === 'string' && message)
         .join(' ')
     : '';
-  const message = fromErrors || body?.error || '';
+  const message = fromErrors || (typeof body?.error === 'string' ? body.error : '');
 
   if (!message) {
     console.error(`[Nova] Formspree returned ${res.status}.`, body);
     return `${FALLBACK_MESSAGE} (error ${res.status})`;
   }
-  return message;
+  return cleanText(message, LIMITS.shortText);
 }
 
 /**
  * Submit contact form via Formspree.
  * Set VITE_FORMSPREE_ID in .env — get a free form at https://formspree.io
  */
-export async function submitContactForm(payload) {
+export async function submitContactForm(input) {
+  const validated = validateContactForm(input);
+  if (!validated.ok) {
+    throw new Error(validated.error);
+  }
+
+  const payload = {
+    ...validated.value,
+    _subject: cleanText(input._subject, LIMITS.shortText),
+  };
+
   if (!isConfigured()) {
-    // Dev / pre-config fallback — still useful for UI testing.
+    // Dev / pre-config fallback. Never log the submission itself — it contains PII.
     const warn = import.meta.env.PROD ? console.error : console.info;
-    warn(
-      '[Nova] VITE_FORMSPREE_ID is not set — contact form submission was not delivered.',
-      payload,
-    );
+    warn('[Nova] VITE_FORMSPREE_ID is not set — contact form submission was not delivered.');
     await new Promise((r) => setTimeout(r, 600));
     return {
       ok: true,

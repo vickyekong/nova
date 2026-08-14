@@ -6,7 +6,12 @@
  * 2. Add a backend webhook to mark logos sold on charge.success
  *    (client-side localStorage is a demo fallback only — not secure inventory)
  * 3. Fulfillment: email file package within 24 hrs (current SLA)
+ *
+ * Security: amount, logo and "sold" state all originate in the browser, so a
+ * tampered client can change either. The Paystack webhook in step 2 must be the
+ * authority on price and inventory before any files are delivered.
  */
+import { isValidEmail, normalizeEmail, cleanText, LIMITS } from './validation';
 
 const PAYSTACK_SRC = 'https://js.paystack.co/v1/inline.js';
 
@@ -15,6 +20,7 @@ export const CHECKOUT_CANCELLED = 'checkout_cancelled';
 export const CHECKOUT_UNCONFIGURED = 'checkout_unconfigured';
 export const CHECKOUT_SOLD_OUT = 'checkout_sold_out';
 export const CHECKOUT_SCRIPT_FAILED = 'checkout_script_failed';
+export const CHECKOUT_INVALID_INPUT = 'checkout_invalid_input';
 
 function checkoutError(code, message, cause) {
   const error = new Error(message, cause ? { cause } : undefined);
@@ -90,6 +96,7 @@ export function getLocallySoldIds() {
  * @returns {boolean} whether the write succeeded (storage can be full or blocked)
  */
 export function markLogoSoldLocally(logoId) {
+  if (typeof logoId !== 'string' || !logoId) return false;
   const ids = new Set(getLocallySoldIds());
   ids.add(logoId);
   try {
@@ -124,6 +131,21 @@ export async function checkoutLogo({ email, logo, businessName, tweakNotes }) {
     throw checkoutError(CHECKOUT_SOLD_OUT, 'This logo has already been sold.');
   }
 
+  if (!isValidEmail(email)) {
+    throw checkoutError(
+      CHECKOUT_INVALID_INPUT,
+      'Enter a valid email address to continue.',
+    );
+  }
+
+  const amount = Number(logo.price);
+  if (!Number.isFinite(amount) || amount <= 0) {
+    throw checkoutError(
+      CHECKOUT_INVALID_INPUT,
+      'This logo is not available for checkout right now.',
+    );
+  }
+
   await loadPaystackScript();
 
   return new Promise((resolve, reject) => {
@@ -132,8 +154,8 @@ export async function checkoutLogo({ email, logo, businessName, tweakNotes }) {
     try {
       const handler = window.PaystackPop.setup({
         key: publicKey,
-        email,
-        amount: logo.price * 100, // kobo
+        email: normalizeEmail(email),
+        amount: Math.round(amount * 100), // kobo
         currency: 'NGN',
         ref: `nova-lm-${logo.id}-${Date.now()}`,
         metadata: {
@@ -143,12 +165,12 @@ export async function checkoutLogo({ email, logo, businessName, tweakNotes }) {
             {
               display_name: 'Business Name',
               variable_name: 'business_name',
-              value: businessName || '',
+              value: cleanText(businessName, LIMITS.name),
             },
             {
               display_name: 'Tweak Notes',
               variable_name: 'tweak_notes',
-              value: tweakNotes || '',
+              value: cleanText(tweakNotes, LIMITS.message, { multiline: true }),
             },
           ],
         },

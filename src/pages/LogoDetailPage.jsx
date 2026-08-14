@@ -5,6 +5,7 @@ import { SEO } from '../components/SEO';
 import { MockLogo } from '../components/logo-mart/MockLogo';
 import { getLogoById, formatLogoPrice } from '../data/logos';
 import { CHECKOUT_CANCELLED, checkoutLogo, isLogoSold } from '../lib/paystack';
+import { LIMITS } from '../lib/validation';
 
 export default function LogoDetailPage() {
   const { id } = useParams();
@@ -40,7 +41,8 @@ export default function LogoDetailPage() {
         businessName,
         tweakNotes,
       });
-      navigate(`/logo-mart/success?ref=${reference}&logo=${logo.id}`);
+      const query = new URLSearchParams({ ref: reference, logo: logo.id });
+      navigate(`/logo-mart/success?${query}`);
     } catch (err) {
       if (err?.code !== CHECKOUT_CANCELLED) {
         console.error('[Nova] Logo checkout failed.', err);
@@ -173,6 +175,7 @@ export default function LogoDetailPage() {
                 <input
                   type="email"
                   required
+                  maxLength={LIMITS.email}
                   placeholder="Your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -180,6 +183,7 @@ export default function LogoDetailPage() {
                 />
                 <input
                   type="text"
+                  maxLength={LIMITS.name}
                   placeholder="Business name (for lockup swap)"
                   value={businessName}
                   onChange={(e) => setBusinessName(e.target.value)}
@@ -187,6 +191,7 @@ export default function LogoDetailPage() {
                 />
                 <textarea
                   rows={2}
+                  maxLength={LIMITS.message}
                   placeholder="Tweak notes (optional) — color or name preference"
                   value={tweakNotes}
                   onChange={(e) => setTweakNotes(e.target.value)}

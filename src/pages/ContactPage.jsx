@@ -8,6 +8,7 @@ import { site } from '../data/site';
 import { services } from '../data/services';
 import { budgetRanges, timelineOptions } from '../data/pricing';
 import { submitContactForm } from '../lib/contact';
+import { LIMITS } from '../lib/validation';
 import { getWhatsAppLink } from '../lib/utils';
 
 export default function ContactPage() {
@@ -151,6 +152,7 @@ export default function ContactPage() {
               <input
                 id="businessName"
                 required
+                maxLength={LIMITS.name}
                 value={form.businessName}
                 onChange={(e) => update('businessName', e.target.value)}
                 className="mt-1.5 w-full rounded-nova border border-ink/15 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-nova focus:ring-2 focus:ring-nova/20"
@@ -166,6 +168,7 @@ export default function ContactPage() {
                 id="email"
                 type="email"
                 required
+                maxLength={LIMITS.email}
                 value={form.email}
                 onChange={(e) => update('email', e.target.value)}
                 className="mt-1.5 w-full rounded-nova border border-ink/15 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-nova focus:ring-2 focus:ring-nova/20"
@@ -243,6 +246,7 @@ export default function ContactPage() {
               <textarea
                 id="message"
                 rows={4}
+                maxLength={LIMITS.message}
                 value={form.message}
                 onChange={(e) => update('message', e.target.value)}
                 className="mt-1.5 w-full resize-y rounded-nova border border-ink/15 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-nova focus:ring-2 focus:ring-nova/20"
