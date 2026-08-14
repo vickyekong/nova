@@ -9,6 +9,7 @@ import ContactPage from './pages/ContactPage';
 import LogoMartPage from './pages/LogoMartPage';
 import LogoDetailPage from './pages/LogoDetailPage';
 import CheckoutSuccessPage from './pages/CheckoutSuccessPage';
+import NotFoundPage from './pages/NotFoundPage';
 
 export default function App() {
   return (
@@ -24,6 +25,7 @@ export default function App() {
           <Route path="logo-mart" element={<LogoMartPage />} />
           <Route path="logo-mart/success" element={<CheckoutSuccessPage />} />
           <Route path="logo-mart/:id" element={<LogoDetailPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

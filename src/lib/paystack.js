@@ -10,6 +10,18 @@
 
 const PAYSTACK_SRC = 'https://js.paystack.co/v1/inline.js';
 
+/** Error codes on thrown checkout errors, so callers don't match on messages. */
+export const CHECKOUT_CANCELLED = 'checkout_cancelled';
+export const CHECKOUT_UNCONFIGURED = 'checkout_unconfigured';
+export const CHECKOUT_SOLD_OUT = 'checkout_sold_out';
+export const CHECKOUT_SCRIPT_FAILED = 'checkout_script_failed';
+
+function checkoutError(code, message, cause) {
+  const error = new Error(message, cause ? { cause } : undefined);
+  error.code = code;
+  return error;
+}
+
 let scriptPromise = null;
 
 function loadPaystackScript() {
@@ -20,9 +32,30 @@ function loadPaystackScript() {
     const script = document.createElement('script');
     script.src = PAYSTACK_SRC;
     script.async = true;
-    script.onload = () => resolve();
-    script.onerror = () => reject(new Error('Failed to load Paystack'));
+    script.onload = () => {
+      if (!window.PaystackPop) {
+        reject(
+          checkoutError(
+            CHECKOUT_SCRIPT_FAILED,
+            'Paystack loaded but is unavailable. Reload the page and try again.',
+          ),
+        );
+        return;
+      }
+      resolve();
+    };
+    script.onerror = () =>
+      reject(
+        checkoutError(
+          CHECKOUT_SCRIPT_FAILED,
+          'Couldn’t reach Paystack. Check your connection and try again.',
+        ),
+      );
     document.body.appendChild(script);
+  }).catch((err) => {
+    // Don't cache a failed load — otherwise every retry replays the same rejection.
+    scriptPromise = null;
+    throw err;
   });
 
   return scriptPromise;
@@ -31,17 +64,41 @@ function loadPaystackScript() {
 const SOLD_KEY = 'nova_logo_mart_sold';
 
 export function getLocallySoldIds() {
+  let raw;
   try {
-    return JSON.parse(localStorage.getItem(SOLD_KEY) || '[]');
-  } catch {
+    raw = localStorage.getItem(SOLD_KEY);
+  } catch (err) {
+    console.warn('[Nova] localStorage unavailable — sold logos not read.', err);
+    return [];
+  }
+  if (!raw) return [];
+
+  try {
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) {
+      throw new Error(`Expected an array, got ${typeof parsed}`);
+    }
+    return parsed.filter((id) => typeof id === 'string');
+  } catch (err) {
+    console.warn(`[Nova] Corrupt "${SOLD_KEY}" entry ignored.`, err);
     return [];
   }
 }
 
+/**
+ * Persist a sold logo id locally.
+ * @returns {boolean} whether the write succeeded (storage can be full or blocked)
+ */
 export function markLogoSoldLocally(logoId) {
   const ids = new Set(getLocallySoldIds());
   ids.add(logoId);
-  localStorage.setItem(SOLD_KEY, JSON.stringify([...ids]));
+  try {
+    localStorage.setItem(SOLD_KEY, JSON.stringify([...ids]));
+    return true;
+  } catch (err) {
+    console.warn(`[Nova] Couldn’t persist sold logo "${logoId}" locally.`, err);
+    return false;
+  }
 }
 
 export function isLogoSold(logo) {
@@ -57,49 +114,71 @@ export async function checkoutLogo({ email, logo, businessName, tweakNotes }) {
   const publicKey = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY;
 
   if (!publicKey || publicKey.includes('xxxx')) {
-    throw new Error(
+    throw checkoutError(
+      CHECKOUT_UNCONFIGURED,
       'Paystack is not configured. Add VITE_PAYSTACK_PUBLIC_KEY to your .env file.',
     );
   }
 
   if (isLogoSold(logo)) {
-    throw new Error('This logo has already been sold.');
+    throw checkoutError(CHECKOUT_SOLD_OUT, 'This logo has already been sold.');
   }
 
   await loadPaystackScript();
 
   return new Promise((resolve, reject) => {
-    const handler = window.PaystackPop.setup({
-      key: publicKey,
-      email,
-      amount: logo.price * 100, // kobo
-      currency: 'NGN',
-      ref: `nova-lm-${logo.id}-${Date.now()}`,
-      metadata: {
-        custom_fields: [
-          { display_name: 'Logo ID', variable_name: 'logo_id', value: logo.id },
-          { display_name: 'Logo Name', variable_name: 'logo_name', value: logo.name },
-          {
-            display_name: 'Business Name',
-            variable_name: 'business_name',
-            value: businessName || '',
-          },
-          {
-            display_name: 'Tweak Notes',
-            variable_name: 'tweak_notes',
-            value: tweakNotes || '',
-          },
-        ],
-      },
-      callback(response) {
-        markLogoSoldLocally(logo.id);
-        resolve({ reference: response.reference });
-      },
-      onClose() {
-        reject(new Error('Payment cancelled'));
-      },
-    });
+    let settled = false;
 
-    handler.openIframe();
+    try {
+      const handler = window.PaystackPop.setup({
+        key: publicKey,
+        email,
+        amount: logo.price * 100, // kobo
+        currency: 'NGN',
+        ref: `nova-lm-${logo.id}-${Date.now()}`,
+        metadata: {
+          custom_fields: [
+            { display_name: 'Logo ID', variable_name: 'logo_id', value: logo.id },
+            { display_name: 'Logo Name', variable_name: 'logo_name', value: logo.name },
+            {
+              display_name: 'Business Name',
+              variable_name: 'business_name',
+              value: businessName || '',
+            },
+            {
+              display_name: 'Tweak Notes',
+              variable_name: 'tweak_notes',
+              value: tweakNotes || '',
+            },
+          ],
+        },
+        callback(response) {
+          settled = true;
+          // A storage failure must never hide a completed payment.
+          markLogoSoldLocally(logo.id);
+          resolve({ reference: response?.reference || '' });
+        },
+        onClose() {
+          if (settled) return;
+          settled = true;
+          reject(checkoutError(CHECKOUT_CANCELLED, 'Payment cancelled'));
+        },
+      });
+
+      handler.openIframe();
+    } catch (err) {
+      if (settled) {
+        console.error('[Nova] Paystack error after checkout completed.', err);
+        return;
+      }
+      settled = true;
+      reject(
+        checkoutError(
+          CHECKOUT_SCRIPT_FAILED,
+          'Couldn’t open Paystack checkout. Reload the page and try again.',
+          err,
+        ),
+      );
+    }
   });
 }
