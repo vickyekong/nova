@@ -60,9 +60,10 @@ export default function ContactPage() {
         message: '',
       });
     } catch (err) {
+      console.error('[Nova] Contact form submission failed.', err);
       setStatus({
         type: 'error',
-        message: err.message || 'Couldn’t send. Try WhatsApp instead.',
+        message: err?.message || 'Couldn’t send. Try WhatsApp instead.',
       });
     } finally {
       setSubmitting(false);
