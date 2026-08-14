@@ -4,8 +4,10 @@ import { motion } from 'framer-motion';
 import { Reveal } from '../motion/Reveal';
 import { MagneticLink } from '../motion/MagneticLink';
 import { MockLogo } from '../logo-mart/MockLogo';
-import { logos, formatLogoPrice } from '../../data/logos';
+import { logos } from '../../data/logos';
+import { fadeInView } from '../../lib/motion';
 import { isLogoSold } from '../../lib/paystack';
+import { formatNaira } from '../../lib/utils';
 
 export function LogoMartTeaser() {
   const preview = logos.filter((l) => !isLogoSold(l)).slice(0, 4);
@@ -20,9 +22,7 @@ export function LogoMartTeaser() {
       <div className="container-nova relative">
         <Reveal className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-xl">
-            <p className="font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-nova">
-              Logo Mart
-            </p>
+            <p className="section-label">Logo Mart</p>
             <h2 className="mt-3 font-display text-[clamp(1.85rem,4vw,3rem)] font-semibold tracking-[-0.03em] text-white text-balance">
               Can’t wait for custom? Grab a logo, make it yours, launch today.
             </h2>
@@ -43,10 +43,7 @@ export function LogoMartTeaser() {
             >
               <motion.div
                 className="aspect-square border border-white/15 bg-white p-4 transition-colors group-hover:border-nova"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.06 }}
+                {...fadeInView({ y: 20, delay: i * 0.06 })}
                 whileHover={{ y: -4 }}
               >
                 <div className="flex h-full flex-col items-center justify-between">
@@ -58,7 +55,7 @@ export function LogoMartTeaser() {
                       {logo.name}
                     </p>
                     <p className="price-mono mt-1 text-xs text-nova">
-                      {formatLogoPrice(logo.price)}
+                      {formatNaira(logo.price)}
                     </p>
                   </div>
                 </div>

@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { motion, useMotionValue, useSpring, useReducedMotion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { isCoarsePointer } from '../../lib/motion';
 
 const MotionLink = motion.create(Link);
 
@@ -23,7 +24,7 @@ export function MagneticLink({
   const springY = useSpring(y, { stiffness: 280, damping: 18, mass: 0.4 });
 
   function onMove(e) {
-    if (reduce || window.matchMedia('(pointer: coarse)').matches) return;
+    if (reduce || isCoarsePointer()) return;
     const rect = ref.current?.getBoundingClientRect();
     if (!rect) return;
     const dx = e.clientX - (rect.left + rect.width / 2);

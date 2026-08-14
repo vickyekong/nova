@@ -1,6 +1,7 @@
 import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { MagneticLink } from './motion/MagneticLink';
+import { fadeInView } from '../lib/motion';
 
 export function CTABand({
   headline = "Let's get your business looking the part.",
@@ -20,28 +21,19 @@ export function CTABand({
         <div className="max-w-2xl">
           <motion.h2
             className="font-display text-[clamp(1.85rem,4vw,3rem)] font-semibold tracking-[-0.03em] text-white text-balance"
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+            {...fadeInView()}
           >
             {headline}
           </motion.h2>
           <motion.p
             className="mt-4 max-w-lg text-base text-white/85"
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1, duration: 0.5 }}
+            {...fadeInView({ y: 16, delay: 0.1, duration: 0.5 })}
           >
             {sub}
           </motion.p>
           <motion.div
             className="mt-9 flex flex-col items-start gap-3 sm:flex-row"
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.18, duration: 0.5 }}
+            {...fadeInView({ y: 16, delay: 0.18, duration: 0.5 })}
           >
             <MagneticLink
               to={primaryTo}

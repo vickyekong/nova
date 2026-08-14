@@ -3,6 +3,7 @@ import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { featuredWork } from '../../data/portfolio';
 import { Reveal } from '../motion/Reveal';
+import { EASE } from '../../lib/motion';
 
 export function FeaturedWork() {
   return (
@@ -28,7 +29,7 @@ export function FeaturedWork() {
               initial={{ opacity: 0, x: 40 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.08, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ delay: i * 0.08, duration: 0.5, ease: EASE }}
               data-cursor="hover"
             >
               <div className="group relative aspect-[5/6] overflow-hidden bg-white">

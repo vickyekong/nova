@@ -4,6 +4,8 @@ import { MessageCircle, CheckCircle2 } from 'lucide-react';
 import { InstagramIcon } from '../components/icons';
 import { SEO } from '../components/SEO';
 import { PageHero } from '../components/PageHero';
+import { ExternalLink } from '../components/ui/ExternalLink';
+import { SelectField, TextAreaField, TextField } from '../components/ui/Field';
 import { site } from '../data/site';
 import { services } from '../data/services';
 import { budgetRanges, timelineOptions } from '../data/pricing';
@@ -99,10 +101,8 @@ export default function ContactPage() {
                 <span className="text-sm text-ink-muted">{site.email}</span>
               </span>
             </a>
-            <a
+            <ExternalLink
               href={whatsapp}
-              target="_blank"
-              rel="noopener noreferrer"
               className="flex items-center gap-3 rounded-nova-lg border border-ink/10 bg-white p-4 transition-colors hover:border-nova/40"
             >
               <span className="flex h-10 w-10 items-center justify-center rounded-nova bg-ink text-white">
@@ -114,11 +114,9 @@ export default function ContactPage() {
                 </span>
                 <span className="text-sm text-ink-muted">Usually fastest</span>
               </span>
-            </a>
-            <a
+            </ExternalLink>
+            <ExternalLink
               href={site.instagram}
-              target="_blank"
-              rel="noopener noreferrer"
               className="flex items-center gap-3 rounded-nova-lg border border-ink/10 bg-white p-4 transition-colors hover:border-nova"
             >
               <span className="flex h-10 w-10 items-center justify-center rounded-nova bg-ink text-white">
@@ -130,7 +128,7 @@ export default function ContactPage() {
                 </span>
                 <span className="text-sm text-nova">{site.instagramHandle}</span>
               </span>
-            </a>
+            </ExternalLink>
             <p className="text-sm text-ink-muted">
               Looking for a ready-made logo?{' '}
               <Link to="/logo-mart" className="font-medium text-nova hover:underline">
@@ -144,111 +142,64 @@ export default function ContactPage() {
             onSubmit={onSubmit}
             className="space-y-4 rounded-nova-lg border border-ink/10 bg-white p-6 sm:p-8 lg:col-span-3"
           >
-            <div>
-              <label htmlFor="businessName" className="text-sm font-medium text-ink">
-                Business name
-              </label>
-              <input
-                id="businessName"
-                required
-                value={form.businessName}
-                onChange={(e) => update('businessName', e.target.value)}
-                className="mt-1.5 w-full rounded-nova border border-ink/15 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-nova focus:ring-2 focus:ring-nova/20"
-                placeholder="Your business"
-              />
-            </div>
+            <TextField
+              id="businessName"
+              label="Business name"
+              required
+              value={form.businessName}
+              onChange={(e) => update('businessName', e.target.value)}
+              placeholder="Your business"
+            />
 
-            <div>
-              <label htmlFor="email" className="text-sm font-medium text-ink">
-                Email
-              </label>
-              <input
-                id="email"
-                type="email"
-                required
-                value={form.email}
-                onChange={(e) => update('email', e.target.value)}
-                className="mt-1.5 w-full rounded-nova border border-ink/15 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-nova focus:ring-2 focus:ring-nova/20"
-                placeholder="you@business.com"
-              />
-            </div>
+            <TextField
+              id="email"
+              label="Email"
+              type="email"
+              required
+              value={form.email}
+              onChange={(e) => update('email', e.target.value)}
+              placeholder="you@business.com"
+            />
 
-            <div>
-              <label htmlFor="need" className="text-sm font-medium text-ink">
-                What you need
-              </label>
-              <select
-                id="need"
-                required
-                value={form.need}
-                onChange={(e) => update('need', e.target.value)}
-                className="mt-1.5 w-full rounded-nova border border-ink/15 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-nova focus:ring-2 focus:ring-nova/20"
-              >
-                <option value="">Select…</option>
-                {services.map((s) => (
-                  <option key={s.id} value={s.name}>
-                    {s.name}
-                  </option>
-                ))}
-                <option value="Logo Mart">Logo Mart purchase help</option>
-                <option value="Not sure">Not sure — help me choose</option>
-              </select>
-            </div>
+            <SelectField
+              id="need"
+              label="What you need"
+              required
+              value={form.need}
+              onChange={(e) => update('need', e.target.value)}
+              options={services.map((s) => ({ value: s.name, label: s.name }))}
+            >
+              <option value="Logo Mart">Logo Mart purchase help</option>
+              <option value="Not sure">Not sure — help me choose</option>
+            </SelectField>
 
             <div className="grid gap-4 sm:grid-cols-2">
-              <div>
-                <label htmlFor="budget" className="text-sm font-medium text-ink">
-                  Budget range
-                </label>
-                <select
-                  id="budget"
-                  required
-                  value={form.budget}
-                  onChange={(e) => update('budget', e.target.value)}
-                  className="mt-1.5 w-full rounded-nova border border-ink/15 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-nova focus:ring-2 focus:ring-nova/20"
-                >
-                  <option value="">Select…</option>
-                  {budgetRanges.map((b) => (
-                    <option key={b.value} value={b.label}>
-                      {b.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label htmlFor="timeline" className="text-sm font-medium text-ink">
-                  Timeline
-                </label>
-                <select
-                  id="timeline"
-                  required
-                  value={form.timeline}
-                  onChange={(e) => update('timeline', e.target.value)}
-                  className="mt-1.5 w-full rounded-nova border border-ink/15 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-nova focus:ring-2 focus:ring-nova/20"
-                >
-                  <option value="">Select…</option>
-                  {timelineOptions.map((t) => (
-                    <option key={t.value} value={t.label}>
-                      {t.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="message" className="text-sm font-medium text-ink">
-                Anything else?
-              </label>
-              <textarea
-                id="message"
-                rows={4}
-                value={form.message}
-                onChange={(e) => update('message', e.target.value)}
-                className="mt-1.5 w-full resize-y rounded-nova border border-ink/15 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-nova focus:ring-2 focus:ring-nova/20"
-                placeholder="Links, deadlines, vibes…"
+              <SelectField
+                id="budget"
+                label="Budget range"
+                required
+                value={form.budget}
+                onChange={(e) => update('budget', e.target.value)}
+                options={budgetRanges.map((b) => ({ value: b.label, label: b.label }))}
+              />
+              <SelectField
+                id="timeline"
+                label="Timeline"
+                required
+                value={form.timeline}
+                onChange={(e) => update('timeline', e.target.value)}
+                options={timelineOptions.map((t) => ({ value: t.label, label: t.label }))}
               />
             </div>
+
+            <TextAreaField
+              id="message"
+              label="Anything else?"
+              rows={4}
+              value={form.message}
+              onChange={(e) => update('message', e.target.value)}
+              placeholder="Links, deadlines, vibes…"
+            />
 
             {status.type !== 'idle' && (
               <div

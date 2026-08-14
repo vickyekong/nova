@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { motion, useMotionTemplate, useMotionValue, useSpring, useReducedMotion } from 'framer-motion';
+import { isCoarsePointer } from '../../lib/motion';
 
 /** Subtle 3D tilt on pointer move — for media / interactive tiles */
 export function Tilt({ children, className, max = 8 }) {
@@ -12,7 +13,7 @@ export function Tilt({ children, className, max = 8 }) {
   const transform = useMotionTemplate`perspective(900px) rotateX(${srx}deg) rotateY(${sry}deg)`;
 
   function onMove(e) {
-    if (reduce || window.matchMedia('(pointer: coarse)').matches) return;
+    if (reduce || isCoarsePointer()) return;
     const rect = ref.current?.getBoundingClientRect();
     if (!rect) return;
     const px = (e.clientX - rect.left) / rect.width;

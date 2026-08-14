@@ -3,6 +3,7 @@ import { ArrowRight, Check, ArrowUpRight } from 'lucide-react';
 import { SEO } from '../components/SEO';
 import { CTABand } from '../components/CTABand';
 import { PageHero } from '../components/PageHero';
+import { ExternalLink } from '../components/ui/ExternalLink';
 import { pricingTiers, pricingNote } from '../data/pricing';
 import { site } from '../data/site';
 
@@ -68,15 +69,13 @@ export default function PricingPage() {
           <div className="rounded-nova-lg border border-dashed border-ink/20 bg-white px-6 py-5 text-center sm:px-8">
             <p className="text-sm text-ink-soft">
               Need something more bespoke or strategic? That’s what{' '}
-              <a
+              <ExternalLink
                 href={site.novusUrl}
-                target="_blank"
-                rel="noopener noreferrer"
                 className="inline-flex items-center gap-0.5 font-medium text-nova hover:underline"
               >
                 Novus Africa
                 <ArrowUpRight size={14} />
-              </a>{' '}
+              </ExternalLink>{' '}
               is for.
             </p>
           </div>
